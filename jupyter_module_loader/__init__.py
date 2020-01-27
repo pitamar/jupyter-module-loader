@@ -114,8 +114,11 @@ class NotebookFinder(object):
             # lists aren't hashable
             key = os.path.sep.join(path)
 
-        if key not in self.loaders:
-            self.loaders[key] = NotebookLoader(path)
+        # if key not in self.loaders:
+        #     self.loaders[key] = NotebookLoader(path)
+
+        self.loaders[key] = NotebookLoader(path)
+
         return self.loaders[key]
 
 
