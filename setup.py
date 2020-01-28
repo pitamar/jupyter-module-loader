@@ -4,7 +4,7 @@ with open('README.md', 'r') as f:
     long_description = f.read()
 
 setuptools.setup(
-    name='jupyter-module-loader-pitamar',
+    name='jupyter-module-loader',
     version='0.0.1',
     author='Itamar Schen',
     author_email='itamarschen@gmail.com',
