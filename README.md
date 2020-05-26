@@ -30,4 +30,7 @@ Within `main.py` it is possible to import `my_notebook.ipynb` like so:
     my_notebook.fn() # Calls fn() defined within the notebook above
 ```
 
-You may limit the cells that are imported by assigning tags to those cells you want to load and call ```jupyter_module_loader.register(tags=[<a list of tags that work as markers for cells that are to be imported>])```
+You may limit the cells that are imported by assigning tags to those cells you want to load and call:
+```python
+jupyter_module_loader.register(tags=[<a list of tags that work as markers for cells that are to be imported>])
+```
