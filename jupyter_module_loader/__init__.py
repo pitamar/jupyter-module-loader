@@ -56,7 +56,8 @@ class NotebookModule(types.ModuleType):
 class NotebookLoader(object):
     """Module Loader for Jupyter Notebooks"""
 
-    def __init__(self, path=None):
+    def __init__(self, path=None, tags=None):
+        self.tags = None if tags is None else set(tags)
         self.shell = InteractiveShell.instance()
         self.path = path
 
@@ -83,7 +84,7 @@ class NotebookLoader(object):
 
         try:
             for cell in nb.cells:
-                if cell.cell_type == 'code':
+                if cell.cell_type == 'code' and self.flagged_for_export(cell):
                     # transform the input to executable Python
                     code = self.shell.input_transformer_manager.transform_cell(cell.source)
                     # run the code in themodule
@@ -93,11 +94,16 @@ class NotebookLoader(object):
 
         return mod
 
+    def flagged_for_export(self, cell):
+        return self.tags is None or cell.metadata and cell.metadata.tags \
+               and len(self.tags.intersection(set(cell.metadata.tags)))>0
+
 
 class NotebookFinder(object):
     """Module finder that locates Jupyter Notebooks"""
 
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
+        self.tags = kwargs["tags"] if "tags" in kwargs else None
         self.loaders = {}
 
     def __eq__(self, other):
@@ -117,7 +123,7 @@ class NotebookFinder(object):
         # if key not in self.loaders:
         #     self.loaders[key] = NotebookLoader(path)
 
-        self.loaders[key] = NotebookLoader(path)
+        self.loaders[key] = NotebookLoader(path, self.tags)
 
         return self.loaders[key]
 
